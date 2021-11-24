@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: yait-kad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/11/03 15:41:27 by yait-kad          #+#    #+#             */
-/*   Updated: 2021/11/03 15:41:29 by yait-kad         ###   ########.fr       */
+/*   Created: 2021/11/22 16:48:12 by yait-kad          #+#    #+#             */
+/*   Updated: 2021/11/22 16:48:14 by yait-kad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 #include <stdlib.h>
 #include <pthread.h>
 #include <unistd.h>
+#include <sys/time.h>
 
 typedef struct	s_data
 {
@@ -33,12 +34,10 @@ typedef struct	s_data
 
 typedef struct	s_philo
 {
-	int		id;
+	int			id;
 	long int 	life_time;
-	t_data	*data;
+	t_data		*data;
 }				t_philo;
-
-
 
 int		ft_atoi(const char *str);
 int		ft_parse(int ac, char **argv, t_data *var);
