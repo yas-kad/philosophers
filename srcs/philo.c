@@ -45,10 +45,25 @@ void	*mlkm(void *philo)
 		if (time_stamp() > c_philo->life_time)
 		{
 			pthread_mutex_lock(&c_philo->data->message);
-			printf("%ld %d died\n", (time_stamp() - c_philo->data->starting_time), c_philo->id);
+			printf("\033[0;36m%ld		%d		died\n\033[0m", (time_stamp() - c_philo->data->starting_time), c_philo->id);
 			pthread_mutex_unlock(&c_philo->data->main_mutex);
-			//exit(1);
 		}
+		usleep(100);
+	}
+	
+}
+
+void	*num_of_eating(void *philo)
+{
+	t_philo * curr_philo;
+	int		eating_num;
+
+	curr_philo = (t_philo *)philo;
+	eating_num = curr_philo->data->number_of_times_for_eating * curr_philo->data->number_of_philosophers;
+	while (1)
+	{
+		if (curr_philo->data->number_of_eating >= eating_num)
+			pthread_mutex_unlock(&curr_philo->data->main_mutex);
 		usleep(100);
 	}
 	
@@ -58,28 +73,32 @@ void	*sim(void *philo)
 {
 	t_philo *curr_philo;
 	t_data *data;
+	pthread_t az;
+	pthread_t ne;
 
 	curr_philo = (t_philo *)philo;
 	data = curr_philo->data;
-	pthread_t az;
 
 	pthread_create(&az, NULL, mlkm, curr_philo);
+	if (data->number_of_times_for_eating != 0)
+		pthread_create(&ne, NULL, num_of_eating, philo);
 	while (1)
 	{
 
 		pthread_mutex_lock(&data->forks_mutexs[curr_philo->id - 1]);
 		pthread_mutex_lock(&data->message);
-		printf("%ld %d has taken a left fork\n", (time_stamp() - data->starting_time), curr_philo->id);
+		printf("%ld		%d		has taken a left fork\n", (time_stamp() - data->starting_time), curr_philo->id);
 		pthread_mutex_unlock(&data->message);
 
 		pthread_mutex_lock(&data->forks_mutexs[curr_philo->id % data->number_of_philosophers]);
 		pthread_mutex_lock(&data->message);
-		printf("%ld %d has taken a right fork\n", (time_stamp() - data->starting_time), curr_philo->id);
+		printf("%ld		%d		has taken a right fork\n", (time_stamp() - data->starting_time), curr_philo->id);
 		pthread_mutex_unlock(&data->message);
 
 		pthread_mutex_lock(&data->message);
 		curr_philo->life_time = time_stamp() + data->time_to_die;
-		printf("%ld %d is eating\n", (time_stamp() - data->starting_time), curr_philo->id);
+		printf("\033[0;32m%ld		%d		is eating\n\033[0m", (time_stamp() - data->starting_time), curr_philo->id);
+		data->number_of_eating++;
 		pthread_mutex_unlock(&data->message);
 		usleep(data->time_to_eat * 1000);
 
@@ -87,12 +106,12 @@ void	*sim(void *philo)
 		pthread_mutex_unlock(&data->forks_mutexs[curr_philo->id % data->number_of_philosophers]);
 
 		pthread_mutex_lock(&data->message);
-		printf("%ld %d is sleeping\n", (time_stamp() - data->starting_time), curr_philo->id);
+		printf("\033[0;35m%ld		%d		is sleeping\n\033[0m", (time_stamp() - data->starting_time), curr_philo->id);
 		pthread_mutex_unlock(&data->message);
 		usleep(data->time_to_sleep * 1000);
 
 		pthread_mutex_lock(&data->message);
-		printf("%ld %d is thinking\n", (time_stamp() - data->starting_time), curr_philo->id);
+		printf("\033[0;33m%ld		%d		is thinking\n\033[0m", (time_stamp() - data->starting_time), curr_philo->id);
 		pthread_mutex_unlock(&data->message);
 
 	}
@@ -140,14 +159,13 @@ int main(int ac, char **argv)
 
 	initial_mutexes(&data);
 	pthread_mutex_lock(&data.main_mutex);
+	
 	data.starting_time = time_stamp();
+	data.number_of_eating = 0;
 
 	initial_philo(&philo, &data);
 	create_philo(philo, &data);
-	// printf("hello\n");
-	// printf("philo data: %d %d\n", philo[0].data->time_to_sleep, philo[1].data->time_to_eat);
+
 	pthread_mutex_lock(&data.main_mutex);
-	//pthread_mutex_unlock(&data.main_mutex);
-	// pthread_mutex_lock(&data.main_mutex);
 	return 0;
 }

@@ -23,6 +23,7 @@ typedef struct	s_data
 {
 	int				number_of_philosophers;
 	int				number_of_times_for_eating;
+	int				number_of_eating;
 	int				time_to_die;
 	int				time_to_eat;
 	int				time_to_sleep;
