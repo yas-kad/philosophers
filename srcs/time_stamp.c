@@ -1,38 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_atoi.c                                          :+:      :+:    :+:   */
+/*   time_stamp.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yait-kad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/11/03 16:16:08 by yait-kad          #+#    #+#             */
-/*   Updated: 2021/11/03 16:16:10 by yait-kad         ###   ########.fr       */
+/*   Created: 2021/11/27 23:43:22 by yait-kad          #+#    #+#             */
+/*   Updated: 2021/11/27 23:43:24 by yait-kad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philo.h"
 
-int	ft_atoi(const char *str)
+long	time_stamp(void)
 {
-	unsigned int		nb;
-	unsigned int		i;
+	struct timeval	curr_time;
 
-	nb = 0;
-	i = 1;
-	while (*str == ' ' || *str == '\t' || *str == '\v'
-		|| *str == '\n' || *str == '\f' || *str == '\r')
-		str++;
-	if (*str == '-')
-	{
-		i = -1;
-		str++;
-	}
-	else if (*str == '+')
-		str++;
-	while (*str >= '0' && *str <= '9')
-	{
-		nb = nb * 10 + (*str - '0');
-		str++;
-	}
-	return (nb * i);
+	gettimeofday(&curr_time, NULL);
+	return ((curr_time.tv_sec * 1000) + (curr_time.tv_usec / 1000));
 }

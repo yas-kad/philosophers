@@ -1,6 +1,10 @@
 NAME = philo
 
-SRC = srcs/ft_atoi.c srcs/parse.c srcs/philo.c
+SRC = srcs/ft_atoi.c srcs/parse.c srcs/time_stamp.c srcs/initial.c \
+	srcs/check_death.c srcs/check_eating_num.c srcs/simulation.c \
+	srcs/take_left_fork.c srcs/take_right_fork.c \
+	srcs/is_eating.c srcs/is_sleeping.c srcs/is_thinking.c \
+	srcs/destroy_mutexes.c srcs/philo.c
 
 OBJ = $(SRC:.c=.o)
 

@@ -1,38 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_atoi.c                                          :+:      :+:    :+:   */
+/*   check_eating_num.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yait-kad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/11/03 16:16:08 by yait-kad          #+#    #+#             */
-/*   Updated: 2021/11/03 16:16:10 by yait-kad         ###   ########.fr       */
+/*   Created: 2021/11/27 23:51:15 by yait-kad          #+#    #+#             */
+/*   Updated: 2021/11/27 23:51:17 by yait-kad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philo.h"
 
-int	ft_atoi(const char *str)
+void	*num_of_eating(void *philo)
 {
-	unsigned int		nb;
-	unsigned int		i;
+	t_philo	*curr_philo;
+	int		eating_num;
 
-	nb = 0;
-	i = 1;
-	while (*str == ' ' || *str == '\t' || *str == '\v'
-		|| *str == '\n' || *str == '\f' || *str == '\r')
-		str++;
-	if (*str == '-')
+	curr_philo = (t_philo *)philo;
+	eating_num = curr_philo->data->number_of_times_for_eating
+		* curr_philo->data->number_of_philosophers;
+	while (1)
 	{
-		i = -1;
-		str++;
+		if (curr_philo->data->number_of_eating >= eating_num)
+			pthread_mutex_unlock(&curr_philo->data->main_mutex);
+		usleep(100);
 	}
-	else if (*str == '+')
-		str++;
-	while (*str >= '0' && *str <= '9')
-	{
-		nb = nb * 10 + (*str - '0');
-		str++;
-	}
-	return (nb * i);
 }

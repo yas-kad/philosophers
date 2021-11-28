@@ -1,38 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_atoi.c                                          :+:      :+:    :+:   */
+/*   is_sleeping.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yait-kad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/11/03 16:16:08 by yait-kad          #+#    #+#             */
-/*   Updated: 2021/11/03 16:16:10 by yait-kad         ###   ########.fr       */
+/*   Created: 2021/11/27 22:28:14 by yait-kad          #+#    #+#             */
+/*   Updated: 2021/11/27 22:28:15 by yait-kad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philo.h"
 
-int	ft_atoi(const char *str)
+void	is_sleeping(t_philo *curr_philo, t_data *data)
 {
-	unsigned int		nb;
-	unsigned int		i;
-
-	nb = 0;
-	i = 1;
-	while (*str == ' ' || *str == '\t' || *str == '\v'
-		|| *str == '\n' || *str == '\f' || *str == '\r')
-		str++;
-	if (*str == '-')
-	{
-		i = -1;
-		str++;
-	}
-	else if (*str == '+')
-		str++;
-	while (*str >= '0' && *str <= '9')
-	{
-		nb = nb * 10 + (*str - '0');
-		str++;
-	}
-	return (nb * i);
+	pthread_mutex_lock(&data->message);
+	printf("\033[0;35m%ld		%d		is sleeping\n\033[0m",
+		(time_stamp() - data->starting_time), curr_philo->id);
+	pthread_mutex_unlock(&data->message);
+	usleep(data->time_to_sleep * 1000);
 }
